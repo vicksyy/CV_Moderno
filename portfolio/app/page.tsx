@@ -322,7 +322,7 @@ export default function Page() {
       </nav>
 
       {/* HERO */}
-      <section ref={heroRef} className="h-[105vh] relative z-10 pt-72 pointer-events-none">
+      <section ref={heroRef} className="h-[100vh] relative z-10 pt-72 pointer-events-none">
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 xl:px-20 grid grid-cols-1 md:grid-cols-2 items-center gap-20 pointer-events-none">
           <div className="max-w-xl relative z-20 order-1">
             <div className="fade-up mb-6 leading-[0.9]">
@@ -341,7 +341,7 @@ export default function Page() {
                 className="block text-[60px] md:text-[80px] font-extrabold tracking-wide"
                 style={{
                   fontFamily: "Helvetica, Arial, sans-serif",
-                  fontWeight: 600, // más gordita aún
+                  fontWeight: 600,
                 }}
               >
                 DEVELOPER<span className="text-purple-400">.</span>
@@ -355,50 +355,64 @@ export default function Page() {
         </div>
       </section>
 
-      {/* SECCIÓN 2 – HABILIDADES */}
-      <section
-        ref={section2Ref}
-        className="h-[100vh] flex flex-col items-center justify-center text-white relative z-10 pointer-events-none"
+      {/* SECCIÓN 2 – HABILIDADES (GLASSBOX CENTRAL) */}
+{/* SECCIÓN 2 – HABILIDADES (GLASSBOX CENTRAL) */}
+<section
+  ref={section2Ref}
+  className="h-[90vh] flex flex-col items-center justify-center text-white relative z-10 pointer-events-none"
+>
+  {/* CONTENEDOR DEL TÍTULO DEL MISMO ANCHO QUE LA GLASSBOX */}
+  <div className="w-[80vw] max-w-[1000px] mb-4">
+    <h2
+      className="text-2xl font-normal tracking-[0.25em] opacity-0 skills-title text-gray-300 text-left"
+      style={{ fontFamily: "Helvetica, Arial, sans-serif", letterSpacing: "0.1em" }}
+    >
+      HABILIDADES
+    </h2>
+  </div>
+
+  {/* GLASSBOX */}
+  <div
+    className="
+      w-[80vw]
+      max-w-[1000px]
+      py-14 px-10
+      rounded-2xl
+      bg-white/10
+      backdrop-blur-xl
+      shadow-[0_8px_40px_rgba(255,255,255,0.08)]
+      flex flex-wrap justify-center gap-14
+      pointer-events-none
+    "
+  >
+    {[
+      { icon: "fa-brands fa-square-js", label: "JavaScript" },
+      { icon: "fa-brands fa-react", label: "React" },
+      { icon: "fa-solid fa-cubes", label: "Three.js" },
+      { icon: "fa-brands fa-node-js", label: "Node.js" },
+      { icon: "fa-brands fa-git-alt", label: "Git" },
+      { icon: "fa-brands fa-github", label: "GitHub" },
+      { icon: "fa-brands fa-figma", label: "Figma" },
+      { icon: "fa-brands fa-bootstrap", label: "Bootstrap" },
+    ].map((item, i) => (
+      <div
+        key={i}
+        className="
+          skill-icon opacity-0
+          flex flex-col items-center justify-center
+        "
       >
-          <h2 className="text-4xl font-semibold tracking-[0.25em] mb-12 opacity-0 skills-title text-gray-300"
-      style={{ fontFamily: "Playfair Display, Arial, sans-serif", letterSpacing: "0.02em" }}>
-    MIS LENGUAJES
-  </h2>
+        <i className={`${item.icon} text-6xl text-white drop-shadow-xl mb-3`}></i>
 
-        <div className="flex gap-3 flex-wrap justify-center max-w-[65vw] skills-icons">
-          {[
-            { icon: "fa-brands fa-square-js", label: "JavaScript" },
-            { icon: "fa-brands fa-react", label: "React" },
-            { icon: "fa-solid fa-cubes", label: "Three.js" },
-            { icon: "fa-brands fa-node-js", label: "Node.js" },
-            { icon: "fa-brands fa-git-alt", label: "Git" },
-            { icon: "fa-brands fa-github", label: "GitHub" },
-            { icon: "fa-brands fa-figma", label: "Figma" },
-            { icon: "fa-brands fa-bootstrap", label: "Bootstrap" },
-          ].map((item, i) => (
-            <div
-              key={i}
-              className="
-                skill-icon
-                w-60 h-60
-                flex flex-col items-center justify-center
-                rounded-2xl
-                border border-white/40
-                bg-white/10
-                backdrop-blur-[3px]
-                shadow-[0_8px_30px_rgba(255,255,255,0.08)]
-                opacity-0
-              "
-            >
-              <i className={`${item.icon} text-6xl text-white mb-2 drop-shadow-lg`}></i>
+        <span className="text-xs tracking-widest uppercase text-white/70 font-semibold">
+          {item.label}
+        </span>
+      </div>
+    ))}
+  </div>
+</section>
 
-              <span className="text-xs tracking-widest uppercase text-white/70 font-semibold">
-                {item.label}
-              </span>
-            </div>
-          ))}
-        </div>
-      </section>
+
 
       {/* SECCIÓN 3 */}
       <section
