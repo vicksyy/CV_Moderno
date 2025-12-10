@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import Lenis from "lenis";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
-import * as THREE from "three";
-import Galaxy from "@/components/Galaxy";
+import Galaxy from "@/app/components/Galaxy";
 import ScrollTrigger from "gsap/ScrollTrigger";
+
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -36,13 +36,7 @@ function EarthCanvas() {
       <ambientLight intensity={1.2} />
       <directionalLight intensity={1.5} position={[5, 5, 5]} />
       <EarthModel />
-
-      <OrbitControls
-        enableZoom={false}
-        enablePan={false}
-        autoRotate={false}
-        enableRotate={true}
-      />
+      <OrbitControls enableZoom={false} enablePan={false} autoRotate={false} enableRotate={true} />
     </Canvas>
   );
 }
@@ -53,12 +47,11 @@ function EarthCanvas() {
 function UfoModel() {
   const { scene } = useGLTF("/models/ovni.glb");
 
-useEffect(() => {
-  scene.scale.set(1.3, 1.3, 1.3);
-  scene.rotation.set(0.3, 3.2, 0.05); 
-  scene.position.set(0, 0, 0);
-}, [scene]);
-
+  useEffect(() => {
+    scene.scale.set(1.3, 1.3, 1.3);
+    scene.rotation.set(0.3, 3.2, 0.05);
+    scene.position.set(0, 0, 0);
+  }, [scene]);
 
   return <primitive object={scene} />;
 }
@@ -72,8 +65,6 @@ function UfoCanvas() {
       <ambientLight intensity={5} />
       <directionalLight intensity={5} position={[-4, 4, -4]} />
       <UfoModel />
-
-      {/* Permitir rotación con mouse */}
       <OrbitControls enableZoom={false} enablePan={false} enableRotate={true} />
     </Canvas>
   );
@@ -88,8 +79,67 @@ export default function Page() {
   const section2Ref = useRef<HTMLDivElement>(null);
   const section3Ref = useRef<HTMLDivElement>(null);
 
-  /* Smooth scroll */
+  /* Loader */
+  const [loaderDone, setLoaderDone] = useState(false);
+
+  const whiteScreenRef = useRef<HTMLDivElement>(null);
+  const blackScreenRef = useRef<HTMLDivElement>(null);
+
+  /* --------------------------------------------------
+      🚫 Bloquear scroll mientras loader está activo
+  -------------------------------------------------- */
   useEffect(() => {
+    if (!loaderDone) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [loaderDone]);
+
+  /* --------------------------------------------------
+      🔁 Forzar scroll a top al recargar
+  -------------------------------------------------- */
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    setTimeout(() => window.scrollTo(0, 0), 50);
+  }, []);
+
+  /* Loader Animation */
+  useEffect(() => {
+    const tl = gsap.timeline({
+      onComplete: () => setLoaderDone(true),
+    });
+
+    tl.fromTo(
+      ".loader-text",
+      { opacity: 0 },
+      { opacity: 1, duration: 1.2, ease: "power2.out", delay: 0.5 }
+    )
+      .to(".loader-text", {
+        opacity: 0,
+        duration: 1,
+        ease: "power2.inOut",
+      })
+      .to(whiteScreenRef.current, {
+        y: "-100%",
+        duration: 1.5,
+        ease: "power3.inOut",
+      })
+      .to(
+        blackScreenRef.current,
+        {
+          opacity: 0,
+          duration: 1.2,
+          ease: "power2.out",
+        },
+        "-=0.3"
+      );
+  }, []);
+
+  /* Smooth scroll (solo se activa cuando loaderDone = true) */
+  useEffect(() => {
+    if (!loaderDone) return;
+
     const lenis = new Lenis({ lerp: 0.08 });
 
     function raf(t: number) {
@@ -98,61 +148,112 @@ export default function Page() {
     }
 
     requestAnimationFrame(raf);
+
+  }, [loaderDone]);
+
+  /* Fade-up (hero) */
+  useGSAP(
+    () => {
+      gsap.from(".fade-up", {
+        opacity: 0,
+        y: 40,
+        duration: 1.3,
+        ease: "power3.out",
+        stagger: 0.15,
+      });
+    },
+    { scope: heroRef }
+  );
+
+  /* 🛸 OVNI scroll animation */
+  useEffect(() => {
+    const ufo = ufoRef.current;
+
+    if (!ufo || !section2Ref.current || !section3Ref.current) return;
+
+    gsap.set(ufo, { x: "-60vw", y: "-20vh" });
+
+    gsap.to(ufo, {
+      x: "250vw",
+      y: "95vh",
+      ease: "none",
+      scrollTrigger: {
+        trigger: section2Ref.current,
+        start: "top 95%",
+        end: () => `${section3Ref.current!.offsetTop + 600}`,
+        scrub: true,
+      },
+    });
   }, []);
 
-  /* Animaciones de texto */
+  /* Animación habilidades */
   useGSAP(() => {
-    gsap.from(".fade-up", {
-      opacity: 0,
-      y: 40,
-      duration: 1.3,
+    gsap.to(".skills-title", {
+      opacity: 1,
+      y: -20,
+      duration: 1.2,
       ease: "power3.out",
-      stagger: 0.15,
+      scrollTrigger: {
+        trigger: section2Ref.current,
+        start: "top center",
+      },
     });
-  }, { scope: heroRef });
 
-  /* --------------------------------------------------
-      🛸 OVNI DIAGONAL:
-      entra desde IZQUIERDA-ARRIBA →
-      sale por DERECHA-ABAJO
-  -------------------------------------------------- */
-  useEffect(() => {
-  const ufo = ufoRef.current;
-
-  if (!ufo || !section2Ref.current || !section3Ref.current) return;
-
-  gsap.set(ufo, { x: "-40vw", y: "-20vh" });
-
-  gsap.to(ufo, {
-    x: "250vw",
-    y: "55vh",
-    ease: "none", // mucho más suave en scroll
-    scrollTrigger: {
-      trigger: section2Ref.current,
-      start: "bottom bottom",   // ⭐ empieza más tarde aún
-      end: () => `${section3Ref.current!.offsetTop + 600}`, // ⭐ termina más abajo = recorrido + largo
-      scrub: true,
-    },
+    gsap.to(".skill-icon", {
+      opacity: 1,
+      y: -10,
+      duration: 0.8,
+      stagger: 0.15,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: section2Ref.current,
+        start: "top center",
+      },
+    });
   });
-}, []);
-
 
   return (
     <main className="relative min-h-screen w-full text-white overflow-hidden">
+
+      {/* LOADER */}
+      {!loaderDone && (
+        <div
+          ref={whiteScreenRef}
+          className="fixed inset-0 bg-black flex items-center justify-center z-[9999]"
+        >
+          <h1
+            className="loader-text text-white text-3xl tracking-[0.5em]"
+            style={{
+              fontFamily: "Helvetica, Arial, sans-serif",
+              fontWeight: 300,
+              letterSpacing: "0.25em",
+            }}
+          >
+            EL PORTFOLIO DE VICKY
+          </h1>
+        </div>
+      )}
+
+      {!loaderDone && (
+        <div
+          ref={blackScreenRef}
+          className="fixed inset-0 bg-black z-[9998]"
+        />
+      )}
 
       {/* 🌌 Galaxy */}
       <div className="fixed inset-0 -z-20 bg-black">
         <Galaxy
           mouseRepulsion={true}
           mouseInteraction={true}
-          density={1.5}
-          glowIntensity={0.5}
-          saturation={0.8}
+          density={1}
+          glowIntensity={0.3}
+          saturation={0.2}
           hueShift={240}
         />
       </div>
 
-      {/* 🌍 TIERRA */}
+      {/* 🌍 Tierra */}
       <div
         className="
           pointer-events-auto
@@ -168,7 +269,7 @@ export default function Page() {
         <EarthCanvas />
       </div>
 
-      {/* 🛸 OVNI DETRÁS DEL TEXTO */}
+      {/* 🛸 OVNI */}
       <div
         ref={ufoRef}
         className="
@@ -213,22 +314,36 @@ export default function Page() {
           </div>
 
           <div className="hidden md:flex items-center gap-5 text-xl opacity-90">
-            <i className="fa-brands fa-instagram hover:text-purple-400 transition"></i>
             <i className="fa-brands fa-github hover:text-purple-400 transition"></i>
+            <i className="fa-brands fa-linkedin hover:text-purple-400 transition"></i>
             <i className="fa-brands fa-x-twitter hover:text-purple-400 transition"></i>
           </div>
         </div>
       </nav>
 
       {/* HERO */}
-      <section ref={heroRef} className="relative z-10 pt-72 pointer-events-none">
+      <section ref={heroRef} className="h-[105vh] relative z-10 pt-72 pointer-events-none">
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 xl:px-20 grid grid-cols-1 md:grid-cols-2 items-center gap-20 pointer-events-none">
           <div className="max-w-xl relative z-20 order-1">
             <div className="fade-up mb-6 leading-[0.9]">
-              <span className="block text-[70px] md:text-[90px] font-[400] italic font-serif">
+             <span
+                className="block text-[70px] md:text-[90px]"
+                style={{
+                  fontFamily: "'Playfair Display', serif",
+                  fontWeight: 500, // más elegante
+                  letterSpacing: "-0.5px", // serif moderna más fina
+                }}
+              >
                 Creative
               </span>
-              <span className="block text-[60px] md:text-[80px] font-extrabold tracking-wide">
+
+              <span
+                className="block text-[60px] md:text-[80px] font-extrabold tracking-wide"
+                style={{
+                  fontFamily: "Helvetica, Arial, sans-serif",
+                  fontWeight: 600, // más gordita aún
+                }}
+              >
                 DEVELOPER<span className="text-purple-400">.</span>
               </span>
             </div>
@@ -240,12 +355,49 @@ export default function Page() {
         </div>
       </section>
 
-      {/* SECCIÓN 2 */}
+      {/* SECCIÓN 2 – HABILIDADES */}
       <section
         ref={section2Ref}
-        className="h-[100vh] flex items-center justify-center text-white relative z-10 pointer-events-none"
+        className="h-[100vh] flex flex-col items-center justify-center text-white relative z-10 pointer-events-none"
       >
-        <h2 className="text-3xl opacity-50">Dominio del 3D</h2>
+          <h2 className="text-4xl font-semibold tracking-[0.25em] mb-12 opacity-0 skills-title text-gray-300"
+      style={{ fontFamily: "Playfair Display, Arial, sans-serif", letterSpacing: "0.02em" }}>
+    MIS LENGUAJES
+  </h2>
+
+        <div className="flex gap-3 flex-wrap justify-center max-w-[65vw] skills-icons">
+          {[
+            { icon: "fa-brands fa-square-js", label: "JavaScript" },
+            { icon: "fa-brands fa-react", label: "React" },
+            { icon: "fa-solid fa-cubes", label: "Three.js" },
+            { icon: "fa-brands fa-node-js", label: "Node.js" },
+            { icon: "fa-brands fa-git-alt", label: "Git" },
+            { icon: "fa-brands fa-github", label: "GitHub" },
+            { icon: "fa-brands fa-figma", label: "Figma" },
+            { icon: "fa-brands fa-bootstrap", label: "Bootstrap" },
+          ].map((item, i) => (
+            <div
+              key={i}
+              className="
+                skill-icon
+                w-60 h-60
+                flex flex-col items-center justify-center
+                rounded-2xl
+                border border-white/40
+                bg-white/10
+                backdrop-blur-[3px]
+                shadow-[0_8px_30px_rgba(255,255,255,0.08)]
+                opacity-0
+              "
+            >
+              <i className={`${item.icon} text-6xl text-white mb-2 drop-shadow-lg`}></i>
+
+              <span className="text-xs tracking-widest uppercase text-white/70 font-semibold">
+                {item.label}
+              </span>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* SECCIÓN 3 */}
