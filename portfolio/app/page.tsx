@@ -8,6 +8,14 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import Galaxy from "@/app/components/Galaxy";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/app/components/ui/carousel"
+import TiltedCard from '@/app/components/TiltedCard';
 
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -78,6 +86,9 @@ export default function Page() {
   const ufoRef = useRef<HTMLDivElement>(null);
   const section2Ref = useRef<HTMLDivElement>(null);
   const section3Ref = useRef<HTMLDivElement>(null);
+  const projTitleRef = useRef<HTMLHeadingElement>(null);
+const projCarouselRef = useRef<HTMLDivElement>(null);
+
 
   /* Loader */
   const [loaderDone, setLoaderDone] = useState(false);
@@ -212,6 +223,40 @@ export default function Page() {
     });
   });
 
+  /* Entrada GSAP – Sección 3 (Proyectos) */
+useEffect(() => {
+  if (!section3Ref.current) return;
+
+  gsap.set([projTitleRef.current, projCarouselRef.current], {
+    opacity: 0,
+    y: 40,
+  });
+
+  gsap.to(projTitleRef.current, {
+    opacity: 1,
+    y: 0,
+    duration: 1.1,
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: section3Ref.current,
+      start: "top center",
+    },
+  });
+
+  gsap.to(projCarouselRef.current, {
+    opacity: 1,
+    y: 0,
+    duration: 1.2,
+    delay: 0.2,
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: section3Ref.current,
+      start: "top center",
+    },
+  });
+}, []);
+
+
   return (
     <main className="relative min-h-screen w-full text-white overflow-hidden">
 
@@ -325,9 +370,9 @@ export default function Page() {
       <section ref={heroRef} className="h-[100vh] relative z-10 pt-72 pointer-events-none">
         <div className="max-w-[1400px] mx-auto px-6 md:px-12 xl:px-20 grid grid-cols-1 md:grid-cols-2 items-center gap-20 pointer-events-none">
           <div className="max-w-xl relative z-20 order-1">
-            <div className="fade-up mb-6 leading-[0.9]">
+            <div className="fade-up mb-3 leading-[0.9]">
              <span
-                className="block text-[70px] md:text-[90px]"
+                className="mb-1 block text-[70px] md:text-[90px]"
                 style={{
                   fontFamily: "'Playfair Display', serif",
                   fontWeight: 500, // más elegante
@@ -349,22 +394,22 @@ export default function Page() {
             </div>
 
             <p className="fade-up text-gray-300 mb-6">
-              Por todo el mundo.
+              En cualquier lugar.
             </p>
           </div>
         </div>
       </section>
 
-      {/* SECCIÓN 2 – HABILIDADES (GLASSBOX CENTRAL) */}
 {/* SECCIÓN 2 – HABILIDADES (GLASSBOX CENTRAL) */}
 <section
   ref={section2Ref}
-  className="h-[90vh] flex flex-col items-center justify-center text-white relative z-10 pointer-events-none"
+  className="h-[80vh] flex flex-col items-center justify-center text-white relative z-10 pointer-events-none"
 >
   {/* CONTENEDOR DEL TÍTULO DEL MISMO ANCHO QUE LA GLASSBOX */}
-  <div className="w-[80vw] max-w-[1000px] mb-4">
+  <div className="w-[80vw] max-w-[1200px] mb-4">
     <h2
-      className="text-2xl font-normal tracking-[0.25em] opacity-0 skills-title text-gray-300 text-left"
+    
+      className="text-3xl font-light tracking-[0.2em] opacity-0 skills-title text-gray-200 text-left"
       style={{ fontFamily: "Helvetica, Arial, sans-serif", letterSpacing: "0.1em" }}
     >
       HABILIDADES
@@ -375,13 +420,13 @@ export default function Page() {
   <div
     className="
       w-[80vw]
-      max-w-[1000px]
+      max-w-[1200px]
       py-14 px-10
       rounded-2xl
       bg-white/10
       backdrop-blur-xl
       shadow-[0_8px_40px_rgba(255,255,255,0.08)]
-      flex flex-wrap justify-center gap-14
+      flex flex-wrap justify-center gap-16
       pointer-events-none
     "
   >
@@ -402,9 +447,9 @@ export default function Page() {
           flex flex-col items-center justify-center
         "
       >
-        <i className={`${item.icon} text-6xl text-white drop-shadow-xl mb-3`}></i>
+        <i className={`${item.icon} text-7xl text-white drop-shadow-xl mb-3`}></i>
 
-        <span className="text-xs tracking-widest uppercase text-white/70 font-semibold">
+        <span className="text-xs tracking-widest uppercase text-white/70 font-normal">
           {item.label}
         </span>
       </div>
@@ -414,13 +459,99 @@ export default function Page() {
 
 
 
-      {/* SECCIÓN 3 */}
-      <section
-        ref={section3Ref}
-        className="h-[100vh] flex items-center justify-center text-white relative z-10 pointer-events-none"
-      >
-        <h2 className="text-3xl opacity-50">Aquí empieza la tercera sección</h2>
-      </section>
+{/* SECCIÓN 3 – CAROUSEL DE PROYECTOS (CON TILTEDCARD) */}
+<section
+  ref={section3Ref}
+  className="h-[100vh] flex flex-col items-center justify-center text-white relative z-10"
+>
+  <div className="w-[80vw] max-w-[1150px]">
+    <h2
+    ref={projTitleRef}
+      className="text-3xl font-light tracking-[0.2em] mb-1 opacity-70"
+      style={{ fontFamily: "Helvetica, Arial, sans-serif", letterSpacing: "0.1em" }}
+    >
+      PROYECTOS
+    </h2>
+  </div>
+
+  <div ref={projCarouselRef} className="w-[80vw] max-w-[1200px]">
+    <Carousel className="w-full">
+      <CarouselContent className="py-10 flex">
+
+        {[
+          {
+            img: "https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58",
+            title: "Kendrick Lamar - GNX",
+          },
+          {
+            img: "https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58",
+            title: "Album 2",
+          },
+          {
+            img: "https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58",
+            title: "Album 3",
+          },
+          {
+            img: "https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58",
+            title: "Album 4",
+          },
+          {
+            img: "https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58",
+            title: "Album 5",
+          },
+          {
+            img: "https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58",
+            title: "Album 6",
+          },
+        ].map((item, i) => (
+          <CarouselItem
+            key={i}
+            className="basis-full md:basis-1/3 flex justify-center"
+          >
+            <TiltedCard
+              imageSrc={item.img}
+              altText={item.title}
+              captionText={item.title}
+              containerHeight="360px"
+              containerWidth="360px"
+              imageHeight="360px"
+              imageWidth="360px"
+              rotateAmplitude={12}
+              scaleOnHover={1.05}
+              showMobileWarning={false}
+              showTooltip={false}
+              displayOverlayContent={true}
+              overlayContent={
+                <div
+                  className="
+                    px-4 py-2 
+                    rounded-xl 
+                    bg-white/10 
+                    backdrop-blur-md 
+                    border border-white/20 
+                    shadow-lg 
+                    text-white 
+                    text-sm 
+                    tracking-wide
+                    mt-6 ml-6
+                  "
+                >
+                  {item.title}
+                </div>
+              }
+            />
+          </CarouselItem>
+        ))}
+
+      </CarouselContent>
+
+      <CarouselPrevious variant="iconClear" size="icon-lg" className="text-white hover:text-purple-300" />
+      <CarouselNext variant="iconClear" size="icon-lg" className="text-white hover:text-purple-300" />
+    </Carousel>
+  </div>
+</section>
+
+
 
     </main>
   );
