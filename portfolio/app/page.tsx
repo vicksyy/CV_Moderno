@@ -8,6 +8,7 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF } from "@react-three/drei";
 import Galaxy from "@/app/components/Galaxy";
 import ScrollTrigger from "gsap/ScrollTrigger";
+import Navbar from "@/app/components/navbar";
 import {
   Carousel,
   CarouselContent,
@@ -41,8 +42,8 @@ function EarthCanvas() {
       camera={{ position: [0, 0, 1180], fov: 40 }}
       style={{ width: "100%", height: "100%" }}
     >
-      <ambientLight intensity={1.2} />
-      <directionalLight intensity={1.5} position={[5, 5, 5]} />
+      <ambientLight intensity={1.4} />
+      <directionalLight intensity={1.8} position={[-5, 3, 2]} />
       <EarthModel />
       <OrbitControls enableZoom={false} enablePan={false} autoRotate={false} enableRotate={true} />
     </Canvas>
@@ -202,7 +203,7 @@ const projCarouselRef = useRef<HTMLDivElement>(null);
     gsap.to(".skills-title", {
       opacity: 1,
       y: -20,
-      duration: 1.2,
+      duration: 1.5,
       ease: "power3.out",
       scrollTrigger: {
         trigger: section2Ref.current,
@@ -213,7 +214,7 @@ const projCarouselRef = useRef<HTMLDivElement>(null);
     gsap.to(".skill-icon", {
       opacity: 1,
       y: -10,
-      duration: 0.8,
+      duration: 1,
       stagger: 0.15,
       ease: "power3.out",
       scrollTrigger: {
@@ -267,14 +268,14 @@ useEffect(() => {
           className="fixed inset-0 bg-black flex items-center justify-center z-[9999]"
         >
           <h1
-            className="loader-text text-white text-3xl tracking-[0.5em]"
+            className="loader-text opacity-0 text-white text-3xl tracking-[0.5em]"
             style={{
               fontFamily: "Helvetica, Arial, sans-serif",
               fontWeight: 300,
               letterSpacing: "0.25em",
             }}
           >
-            EL PORTFOLIO DE VICKY
+            EL PORTFOLIO DE VICTORIA
           </h1>
         </div>
       )}
@@ -340,23 +341,9 @@ useEffect(() => {
             <img src="/tu-logo.png" alt="logo" className="w-10 h-10 object-contain" />
           </div>
 
-          <div
-            className="
-              hidden md:flex items-center gap-10 
-              px-10 py-3 
-              bg-white/10 backdrop-blur-xl
-              rounded-full border border-white/10 shadow-lg
-            "
-          >
-            {["About me", "Skills", "Projects", "Source Code"].map((item) => (
-              <button
-                key={item}
-                className="text-sm font-medium opacity-90 hover:text-purple-400 transition"
-              >
-                {item}
-              </button>
-            ))}
-          </div>
+          
+            <Navbar />
+          
 
           <div className="hidden md:flex items-center gap-5 text-xl opacity-90">
             <i className="fa-brands fa-github hover:text-purple-400 transition"></i>
@@ -367,44 +354,52 @@ useEffect(() => {
       </nav>
 
       {/* HERO */}
-      <section ref={heroRef} className="h-[100vh] relative z-10 pt-72 pointer-events-none">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-12 xl:px-20 grid grid-cols-1 md:grid-cols-2 items-center gap-20 pointer-events-none">
-          <div className="max-w-xl relative z-20 order-1">
-            <div className="fade-up mb-3 leading-[0.9]">
-             <span
-                className="mt-10 mb-4 block text-[80px] md:text-[100px]"
-                style={{
-                  fontFamily: "'Playfair Display', serif",
-                  fontWeight: 500,
-                  letterSpacing: "1px",
-                }}
-              >
-                Diseñadora
-              </span>
+<section ref={heroRef} className="h-[100vh] relative z-10 pt-72 pointer-events-none">
 
-              <span
-                className="ml-0 block text-[70px] md:text-[90px] font-extrabold tracking-wide"
-                style={{
-                  fontFamily: "Helvetica, Arial, sans-serif",
-                  fontWeight: 600,
-                  letterSpacing: "1px",
-                }}
-              >
-                Creativa<span className="text-purple-400">.</span>
-              </span>
-            </div>
+  {/* P debajo del todo, esquina inferior izquierda */}
+  <p
+    className="fade-up absolute left-6 bottom-10 md:left-12 xl:left-20 opacity-80"
+    style={{
+      fontFamily: "'Helvetica', sans-serif",
+    }}
+  >
+    Desarrolladora Creativa. En todas partes
+  </p>
 
-            <p className="fade-up text-gray-300 mb-6">
-              En cualquier lugar.
-            </p>
-          </div>
-        </div>
-      </section>
+  <div className="max-w-[1400px] mx-auto px-6 md:px-12 xl:px-20 grid grid-cols-1 md:grid-cols-2 items-center gap-20 pointer-events-none">
+    <div className="max-w-xl relative z-20 order-1">
+      <div className="fade-up mb-3 leading-[0.9]">
+        <span
+          className="mt-10 mb-2 opacity-90 block text-[120px] md:text-[140px]"
+          style={{
+            fontFamily: "'Playfair Display', serif",
+            fontWeight: 'lighter',
+            letterSpacing: "1px",
+          }}
+        >
+          Victoria
+        </span>
+
+        <span
+          className="ml-[1em] block opacity-90 text-[120px] md:text-[140px] font-extrabold tracking-wide"
+          style={{
+            fontFamily: "'Playfair Display', serif",
+            fontWeight: 'lighter',
+            letterSpacing: "1px",
+          }}
+        >
+          Martín<span className="text-purple-600 opacity-90">.</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 {/* SECCIÓN 2 – HABILIDADES (GLASSBOX CENTRAL) */}
 <section
   ref={section2Ref}
-  className="h-[70vh] flex flex-col items-center justify-center text-white relative z-10 pointer-events-none"
+  className="h-[80vh] flex flex-col items-center justify-center text-white relative z-10 pointer-events-none"
 >
   {/* CONTENEDOR DEL TÍTULO DEL MISMO ANCHO QUE LA GLASSBOX */}
   <div className="w-[80vw] max-w-[1200px] mb-4">
@@ -513,9 +508,9 @@ useEffect(() => {
               imageSrc={item.img}
               altText={item.title}
               captionText={item.title}
-              containerHeight="360px"
+              containerHeight="410px"
               containerWidth="360px"
-              imageHeight="360px"
+              imageHeight="410px"
               imageWidth="360px"
               rotateAmplitude={12}
               scaleOnHover={1.05}
@@ -628,22 +623,22 @@ useEffect(() => {
         "
       />
 
-      {/* Submit */}
+      {/* Enviar */}
       <button
         type="submit"
         className="
-          bg-white
+          bg-white/90
           text-black
           px-6 py-3
           rounded-full
           font-normal
           w-full
           mt-4
-          hover:bg-white/90
+          hover:bg-white
           transition
         "
       >
-        Submit
+        Enviar
       </button>
 
     </form>
