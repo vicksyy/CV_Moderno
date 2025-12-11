@@ -372,24 +372,25 @@ useEffect(() => {
           <div className="max-w-xl relative z-20 order-1">
             <div className="fade-up mb-3 leading-[0.9]">
              <span
-                className="mb-1 block text-[70px] md:text-[90px]"
+                className="mt-10 mb-4 block text-[80px] md:text-[100px]"
                 style={{
                   fontFamily: "'Playfair Display', serif",
-                  fontWeight: 500, // más elegante
-                  letterSpacing: "-0.5px", // serif moderna más fina
+                  fontWeight: 500,
+                  letterSpacing: "1px",
                 }}
               >
-                Creative
+                Diseñadora
               </span>
 
               <span
-                className="block text-[60px] md:text-[80px] font-extrabold tracking-wide"
+                className="ml-0 block text-[70px] md:text-[90px] font-extrabold tracking-wide"
                 style={{
                   fontFamily: "Helvetica, Arial, sans-serif",
                   fontWeight: 600,
+                  letterSpacing: "1px",
                 }}
               >
-                DEVELOPER<span className="text-purple-400">.</span>
+                Creativa<span className="text-purple-400">.</span>
               </span>
             </div>
 
@@ -403,7 +404,7 @@ useEffect(() => {
 {/* SECCIÓN 2 – HABILIDADES (GLASSBOX CENTRAL) */}
 <section
   ref={section2Ref}
-  className="h-[80vh] flex flex-col items-center justify-center text-white relative z-10 pointer-events-none"
+  className="h-[70vh] flex flex-col items-center justify-center text-white relative z-10 pointer-events-none"
 >
   {/* CONTENEDOR DEL TÍTULO DEL MISMO ANCHO QUE LA GLASSBOX */}
   <div className="w-[80vw] max-w-[1200px] mb-4">
@@ -462,7 +463,7 @@ useEffect(() => {
 {/* SECCIÓN 3 – CAROUSEL DE PROYECTOS (CON TILTEDCARD) */}
 <section
   ref={section3Ref}
-  className="h-[100vh] flex flex-col items-center justify-center text-white relative z-10"
+  className="h-[90vh] flex flex-col items-center justify-center text-white relative z-10"
 >
   <div className="w-[80vw] max-w-[1150px]">
     <h2
@@ -551,6 +552,103 @@ useEffect(() => {
   </div>
 </section>
 
+<section
+  className="
+    h-[90vh]
+    flex flex-col items-center justify-center
+    text-white relative z-10
+    px-4
+  "
+>
+  {/* GLASSBOX */}
+  <div
+    className="
+      w-[60vw]
+      max-w-[1200px]
+      py-14 px-10
+      rounded-2xl
+      bg-white/10
+      backdrop-blur-xl
+      shadow-[0_8px_40px_rgba(255,255,255,0.08)]
+      flex flex-col gap-10
+    "
+  >
+    <h2
+      className="
+        text-center text-3xl font-light tracking-[0.2em]
+        mb-1 opacity-80
+      "
+      style={{ fontFamily: "Helvetica, Arial, sans-serif", letterSpacing: "0.1em" }}
+    >
+      Trabajemos juntos
+    </h2>
+
+    <form className="flex flex-col gap-8 text-white w-full">
+
+      {/* Nombre */}
+      <input
+        type="text"
+        placeholder="Nombre"
+        className="
+          bg-transparent
+          border-b border-white/40
+          outline-none
+          py-3
+          text-white
+          placeholder-white/50
+        "
+      />
+
+      {/* Email */}
+      <input
+        type="email"
+        placeholder="Email"
+        className="
+          bg-transparent
+          border-b border-white/40
+          outline-none
+          py-3
+          text-white
+          placeholder-white/50
+        "
+      />
+
+      {/* Mensaje */}
+      <textarea
+        placeholder="Mensaje"
+        className="
+          bg-transparent
+          border-b border-white/40
+          outline-none
+          py-3
+          text-white
+          placeholder-white/50
+          min-h-[100px]
+          resize-none
+        "
+      />
+
+      {/* Submit */}
+      <button
+        type="submit"
+        className="
+          bg-white
+          text-black
+          px-6 py-3
+          rounded-full
+          font-normal
+          w-full
+          mt-4
+          hover:bg-white/90
+          transition
+        "
+      >
+        Submit
+      </button>
+
+    </form>
+  </div>
+</section>
 
 
     </main>
