@@ -201,31 +201,42 @@ export default function Page() {
     });
   }, []);
 
-  /* Animación habilidades */
-  useGSAP(() => {
-    gsap.to(".skills-title", {
-      opacity: 1,
-      y: -20,
-      duration: 1.5,
-      ease: "power3.out",
-      scrollTrigger: {
-        trigger: section2Ref.current,
-        start: "top center",
-      },
-    });
-
-    gsap.to(".skill-icon", {
-      opacity: 1,
-      y: -10,
-      duration: 1,
-      stagger: 0.15,
-      ease: "power3.out",
-      scrollTrigger: {
-        trigger: section2Ref.current,
-        start: "top center",
-      },
-    });
+/* Animación habilidades */
+useGSAP(() => {
+  // 🟣 Animación del título
+  gsap.from(".skills-title", {
+    y: -100,
+    opacity: 0,
+    duration: 1.4,
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: ".skills-title",
+      start: "top 85%",
+    },
   });
+
+  // 🟣 Animación del texto descriptivo
+  gsap.from(".skills-desc", {
+    y: -30,
+    opacity: 0,
+    duration: 1.2,
+    delay: 0.2,
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: section2Ref.current,
+      start: "top 80%",
+    },
+  });
+
+  // 🟣 Carrusel infinito real (scroll continuo sin paradas)
+  gsap.to(".skills-slider", {
+    x: "-50%",     // suficiente para moverse sin mostrar huecos
+    ease: "none",
+    duration: 35,
+    repeat: -1,    // infinito
+  });
+});
+
 
   /* Entrada GSAP – Sección 3 (Proyectos) */
 useEffect(() => {
@@ -428,63 +439,68 @@ useGSAP(() => {
 </section>
 
 
-{/* SECCIÓN 2 – HABILIDADES (GLASSBOX CENTRAL) */}
 <section
   ref={section2Ref}
-  className="h-[80vh] flex flex-col items-center justify-center text-white relative z-10 pointer-events-none"
+  className="min-h-[90vh] w-full flex flex-col items-center justify-center text-white relative z-10 pointer-events-none"
 >
-  {/* CONTENEDOR DEL TÍTULO DEL MISMO ANCHO QUE LA GLASSBOX */}
-  <div className="w-[80vw] max-w-[1200px] mb-4">
-   <h2
-  className="skills-title text-6xl md:text-7xl font-light tracking-tight opacity-0 mb-3 text-gray-200"
->
-  Habilidades
-</h2>
+  {/* Título */}
+  <h2 className="skills-title text-center text-6xl md:text-7xl font-light tracking-tight mb-6 opacity-90 text-white font-['Playfair_Display']">
+    Habilidades
+  </h2>
 
-  </div>
+  {/* P breve descripción */}
+  <p className="skills-desc text-center text-lg opacity-0 opacity-70 max-w-2xl mb-8 pb-12">
+    Tecnologías y herramientas con las que diseño, construyo y optimizo experiencias digitales modernas.
+  </p>
 
-  {/* GLASSBOX */}
-  <div
-    className="
-      w-[80vw]
-      max-w-[1200px]
-      py-14 px-10
-      rounded-2xl
-      bg-white/10
-      backdrop-blur-md
-      border border-white/20 
-      shadow-lg
-      text-white
-      flex flex-wrap justify-center gap-16
-      pointer-events-none
-    "
-  >
-    {[
-      { icon: "fa-brands fa-square-js", label: "JavaScript" },
-      { icon: "fa-brands fa-react", label: "React" },
-      { icon: "fa-solid fa-cubes", label: "Three.js" },
-      { icon: "fa-brands fa-node-js", label: "Node.js" },
-      { icon: "fa-brands fa-git-alt", label: "Git" },
-      { icon: "fa-brands fa-github", label: "GitHub" },
-      { icon: "fa-brands fa-figma", label: "Figma" },
-      { icon: "fa-brands fa-bootstrap", label: "Bootstrap" },
-    ].map((item, i) => (
-      <div
-        key={i}
-        className="
-          skill-icon opacity-0
-          flex flex-col items-center justify-center
-        "
-      >
-        <i className={`${item.icon} text-7xl text-white drop-shadow-xl mb-3`}></i>
+  {/* Carrusel horizontal infinito */}
+  <div className="relative w-[80vw] overflow-hidden py-10">
 
-        <span className="text-xs tracking-widest uppercase text-white/70 font-normal">
-          {item.label}
-        </span>
-      </div>
-    ))}
+    <div className="skills-slider flex gap-10 w-max px-20">
+      {[
+        { icon: "fa-brands fa-square-js", label: "JavaScript" },
+        { icon: "fa-brands fa-react", label: "React" },
+        { icon: "fa-solid fa-cubes", label: "Three.js" },
+        { icon: "fa-brands fa-node-js", label: "Node.js" },
+        { icon: "fa-brands fa-git-alt", label: "Git" },
+        { icon: "fa-brands fa-github", label: "GitHub" },
+        { icon: "fa-brands fa-figma", label: "Figma" },
+        { icon: "fa-brands fa-bootstrap", label: "Bootstrap" },
+      ]
+        // 🔥 Duplicamos el array para animación infinita
+        .concat([
+          { icon: "fa-brands fa-square-js", label: "JavaScript" },
+          { icon: "fa-brands fa-react", label: "React" },
+          { icon: "fa-solid fa-cubes", label: "Three.js" },
+          { icon: "fa-brands fa-node-js", label: "Node.js" },
+          { icon: "fa-brands fa-git-alt", label: "Git" },
+          { icon: "fa-brands fa-github", label: "GitHub" },
+          { icon: "fa-brands fa-figma", label: "Figma" },
+          { icon: "fa-brands fa-bootstrap", label: "Bootstrap" },
+        ])
+        .map((item, i) => (
+          <div
+            key={i}
+            className="
+              skill-card
+              flex flex-col items-center justify-center
+              bg-white/5 backdrop-blur-md
+              border border-white/10 rounded-2xl
+              px-10 py-8 w-[180px]
+              transition-all duration-300
+            "
+          >
+            <i className={`${item.icon} text-5xl mb-4 text-white`}></i>
+            <span className="text-sm tracking-wide uppercase opacity-80">
+              {item.label}
+            </span>
+          </div>
+        ))}
+    </div>
   </div>
 </section>
+
+
 
 
 <section
@@ -492,7 +508,7 @@ useGSAP(() => {
   className="w-full py-32 px-6 md:px-20 text-white relative z-10"
 >
   {/* Título General */}
-  <h2 className="exp-title text-6xl md:text-7xl font-light tracking-tight mb-24 opacity-90 text-purple-300">
+  <h2 className="exp-title text-6xl md:text-7xl font-light tracking-tight mb-24 opacity-90 text-purple-300 font-['Playfair_Display']">
     Trayectoria Profesional
   </h2>
 
@@ -615,7 +631,7 @@ useGSAP(() => {
   <div className="w-[80vw] max-w-[1150px]">
     <h2
   ref={projTitleRef}
-  className="proj-title text-6xl md:text-7xl font-light tracking-tight opacity-0 mb-8 text-gray-200"
+  className="proj-title text-6xl md:text-7xl font-light tracking-tight opacity-0 mb-8 text-white font-['Playfair_Display']"
 >
   Proyectos
 </h2>
@@ -729,12 +745,9 @@ useGSAP(() => {
       flex flex-col gap-10
     "
   >
-    <h2
-      className="
-        text-center text-3xl font-light tracking-[0.2em]
-        mb-1 opacity-80
-      "
-      style={{ fontFamily: "Helvetica, Arial, sans-serif", letterSpacing: "0.1em" }}
+    <h2 className="
+        text-center text-3xl font-light tracking-tight
+        mb-1 opacity-80 font-['Playfair_Display']"
     >
       Trabajemos juntos
     </h2>
