@@ -413,12 +413,7 @@ useGSAP(() => {
     <div className="max-w-xl relative z-20 order-1">
       <div className="fade-up mb-3 leading-[0.9]">
         <span
-          className="mt-10 mb-2 opacity-90 block text-[120px] md:text-[140px]"
-          style={{
-            fontFamily: "'Playfair Display', serif",
-            fontWeight: 'lighter',
-            letterSpacing: "1px",
-          }}
+          className="mt-10 mb-2 opacity-90 block text-[120px] md:text-[140px] font-['Playfair_Display']"
         >
           Victoria
         </span>
