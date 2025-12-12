@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
+import Link from "next/link";
 import { useGSAP } from "@gsap/react";
 import Lenis from "lenis";
 import { Canvas } from "@react-three/fiber";
@@ -88,7 +89,9 @@ export default function Page() {
   const section2Ref = useRef<HTMLDivElement>(null);
   const section3Ref = useRef<HTMLDivElement>(null);
   const projTitleRef = useRef<HTMLHeadingElement>(null);
-const projCarouselRef = useRef<HTMLDivElement>(null);
+  const projCarouselRef = useRef<HTMLDivElement>(null);
+  const experienceRef = useRef<HTMLDivElement>(null);
+
 
 
   /* Loader */
@@ -257,6 +260,35 @@ useEffect(() => {
   });
 }, []);
 
+useGSAP(() => {
+  // Animación del título
+  gsap.from(".exp-title", {
+    y: -100,
+    opacity: 0,
+    duration: 1.4,
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: ".exp-title",
+      start: "top 85%",
+    },
+  });
+
+  // Animación individual para cada bloque SIN ERROR DE TIPOS
+  gsap.utils.toArray<HTMLElement>(".exp-row").forEach((row) => {
+    gsap.from(row, {
+      x: -120,
+      opacity: 0,
+      duration: 1.3,
+      ease: "power3.out",
+      scrollTrigger: {
+        trigger: row,
+        start: "top 85%",
+        toggleActions: "play none none reverse",
+      },
+    });
+  });
+}, { scope: experienceRef });
+
 
   return (
     <main className="relative min-h-screen w-full text-white overflow-hidden">
@@ -403,13 +435,12 @@ useEffect(() => {
 >
   {/* CONTENEDOR DEL TÍTULO DEL MISMO ANCHO QUE LA GLASSBOX */}
   <div className="w-[80vw] max-w-[1200px] mb-4">
-    <h2
-    
-      className="text-3xl font-light tracking-[0.2em] opacity-0 skills-title text-gray-200 text-left"
-      style={{ fontFamily: "Helvetica, Arial, sans-serif", letterSpacing: "0.1em" }}
-    >
-      HABILIDADES
-    </h2>
+   <h2
+  className="skills-title text-6xl md:text-7xl font-light tracking-tight opacity-0 mb-3 text-gray-200"
+>
+  Habilidades
+</h2>
+
   </div>
 
   {/* GLASSBOX */}
@@ -420,8 +451,10 @@ useEffect(() => {
       py-14 px-10
       rounded-2xl
       bg-white/10
-      backdrop-blur-xl
-      shadow-[0_8px_40px_rgba(255,255,255,0.08)]
+      backdrop-blur-md
+      border border-white/20 
+      shadow-lg
+      text-white
       flex flex-wrap justify-center gap-16
       pointer-events-none
     "
@@ -454,20 +487,139 @@ useEffect(() => {
 </section>
 
 
+<section
+  ref={experienceRef}
+  className="w-full py-32 px-6 md:px-20 text-white relative z-10"
+>
+  {/* Título General */}
+  <h2 className="exp-title text-6xl md:text-7xl font-light tracking-tight mb-24 opacity-90 text-purple-300">
+    Trayectoria Profesional
+  </h2>
+
+  {/* DIVISOR fino entre título y primer bloque */}
+  <div className="max-w-7xl mx-auto w-full mb-12">
+    <div className="h-px bg-white/10 w-full" />
+  </div>
+
+  <div className="space-y-24 max-w-7xl mx-auto">
+
+    {/* Bloque #01 */}
+    <div className="exp-row group pb-16 border-b border-white/10 grid grid-cols-[140px_1fr] gap-10">
+      
+      {/* Año */}
+      <span className="text-4xl md:text-5xl font-semibold opacity-20 select-none pl-4 md:-ml-10 transition-all duration-300 group-hover:text-[#b38bff] group-hover:opacity-60">
+        2025
+      </span>
+
+      {/* Contenido */}
+      <div className="flex flex-col gap-4">
+        <h2 className="text-5xl md:text-6xl font-semibold transition-all duration-300 group-hover:scale-[1.015]">
+          Experiencia Profesional
+        </h2>
+
+        <p className="text-lg opacity-70 max-w-3xl leading-relaxed">
+          Como desarrolladora creativa, he liderado proyectos donde combino UI/UX,
+          animación y estructuras sólidas de frontend para crear experiencias digitales fluidas.
+        </p>
+
+        <div className="flex gap-3 mt-1">
+          <span className="px-4 py-1 rounded-full bg-white/10 backdrop-blur-md text-sm border border-white/10 transition-all duration-300 group-hover:border-[#b38bff]">
+            UI/UX
+          </span>
+
+          <span className="px-4 py-1 rounded-full bg-white/10 backdrop-blur-md text-sm border border-white/10 transition-all duration-300 group-hover:border-[#b38bff]">
+            Frontend
+          </span>
+
+          <span className="px-4 py-1 rounded-full bg-white/10 backdrop-blur-md text-sm border border-white/10 transition-all duration-300 group-hover:border-[#b38bff]">
+            Animación
+          </span>
+        </div>
+      </div>
+    </div>
+
+    {/* Bloque #02 */}
+    <div className="exp-row group pb-16 border-b border-white/10 grid grid-cols-[140px_1fr] gap-10">
+      
+      <span className="text-4xl md:text-5xl font-semibold opacity-20 select-none pl-4 md:-ml-10 transition-all duration-300 group-hover:text-[#b38bff] group-hover:opacity-60">
+        2024
+      </span>
+
+      <div className="flex flex-col gap-4">
+        <h2 className="text-5xl md:text-6xl font-semibold transition-all duration-300 group-hover:scale-[1.015]">
+          Dirección de Proyecto
+        </h2>
+
+        <p className="text-lg opacity-70 max-w-3xl leading-relaxed">
+          He dirigido equipos pequeños para coordinar diseño, desarrollo y despliegue,
+          asegurando eficiencia, claridad y un producto final impecable.
+        </p>
+
+        <div className="flex gap-3 mt-1">
+          <span className="px-4 py-1 rounded-full bg-white/10 backdrop-blur-md text-sm border border-white/10 transition-all duration-300 group-hover:border-[#b38bff]">
+            Project Lead
+          </span>
+
+          <span className="px-4 py-1 rounded-full bg-white/10 backdrop-blur-md text-sm border border-white/10 transition-all duration-300 group-hover:border-[#b38bff]">
+            Gestión UX
+          </span>
+        </div>
+      </div>
+    </div>
+
+    {/* Bloque #03 */}
+    <div className="exp-row group pb-16 border-b border-white/10 grid grid-cols-[140px_1fr] gap-10">
+      
+      <span className="text-4xl md:text-5xl font-semibold opacity-20 select-none pl-4 md:-ml-10 transition-all duration-300 group-hover:text-[#b38bff] group-hover:opacity-60">
+        2023
+      </span>
+
+      <div className="flex flex-col gap-4">
+        <h2 className="text-5xl md:text-6xl font-semibold transition-all duration-300 group-hover:scale-[1.015]">
+          Interfaces Dinámicas
+        </h2>
+
+        <p className="text-lg opacity-70 max-w-3xl leading-relaxed">
+          Construcción de interfaces animadas con GSAP, Three.js y React, logrando
+          experiencias interactivas rápidas, suaves y memorables.
+        </p>
+
+        <div className="flex gap-3 mt-1">
+          <span className="px-4 py-1 rounded-full bg-white/10 backdrop-blur-md text-sm border border-white/10 transition-all duration-300 group-hover:border-[#b38bff]">
+            Web
+          </span>
+
+          <span className="px-4 py-1 rounded-full bg-white/10 backdrop-blur-md text-sm border border-white/10 transition-all duration-300 group-hover:border-[#b38bff]">
+            Animaciones
+          </span>
+
+          <span className="px-4 py-1 rounded-full bg-white/10 backdrop-blur-md text-sm border border-white/10 transition-all duration-300 group-hover:border-[#b38bff]">
+            React
+          </span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+
+
 
 {/* SECCIÓN 3 – CAROUSEL DE PROYECTOS (CON TILTEDCARD) */}
 <section
   ref={section3Ref}
-  className="h-[90vh] flex flex-col items-center justify-center text-white relative z-10"
+  className="min-h-[90vh] flex flex-col items-center justify-center text-white relative z-10"
 >
   <div className="w-[80vw] max-w-[1150px]">
     <h2
-    ref={projTitleRef}
-      className="text-3xl font-light tracking-[0.2em] mb-1 opacity-70"
-      style={{ fontFamily: "Helvetica, Arial, sans-serif", letterSpacing: "0.1em" }}
-    >
-      PROYECTOS
-    </h2>
+  ref={projTitleRef}
+  className="proj-title text-6xl md:text-7xl font-light tracking-tight opacity-0 mb-8 text-gray-200"
+>
+  Proyectos
+</h2>
+
   </div>
 
   <div ref={projCarouselRef} className="w-[80vw] max-w-[1200px]">
@@ -478,71 +630,79 @@ useEffect(() => {
           {
             img: "https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58",
             title: "Kendrick Lamar - GNX",
+            link: "/proyecto-1"
           },
           {
             img: "https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58",
             title: "Album 2",
+            link: "/proyecto-2"
           },
           {
             img: "https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58",
             title: "Album 3",
+            link: "/proyecto-3"
           },
           {
             img: "https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58",
             title: "Album 4",
-          },
-          {
-            img: "https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58",
-            title: "Album 5",
-          },
-          {
-            img: "https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58",
-            title: "Album 6",
+            link: "/proyecto-4"
           },
         ].map((item, i) => (
           <CarouselItem
             key={i}
-            className="basis-full md:basis-1/3 flex justify-center"
+            className="basis-full md:basis-1/2 flex justify-center"
           >
-            <TiltedCard
-              imageSrc={item.img}
-              altText={item.title}
-              captionText={item.title}
-              containerHeight="410px"
-              containerWidth="360px"
-              imageHeight="410px"
-              imageWidth="360px"
-              rotateAmplitude={12}
-              scaleOnHover={1.05}
-              showMobileWarning={false}
-              showTooltip={false}
-              displayOverlayContent={true}
-              overlayContent={
-                <div
-                  className="
-                    px-4 py-2 
-                    rounded-xl 
-                    bg-white/10 
-                    backdrop-blur-md 
-                    border border-white/20 
-                    shadow-lg 
-                    text-white 
-                    text-sm 
-                    tracking-wide
-                    mt-6 ml-6
-                  "
-                >
-                  {item.title}
-                </div>
-              }
-            />
+
+            <Link href={item.link}>
+              <TiltedCard
+                imageSrc={item.img}
+                altText={item.title}
+                captionText={item.title}
+                containerHeight="40vh"
+                containerWidth="30vw"
+                imageHeight="40vh"
+                imageWidth="30vw"
+                rotateAmplitude={12}
+                scaleOnHover={1.05}
+                showMobileWarning={false}
+                showTooltip={false}
+                displayOverlayContent={true}
+                overlayContent={
+                  <div
+                    className="
+                      px-4 py-2 
+                      rounded-xl 
+                      bg-white/10 
+                      backdrop-blur-md 
+                      border border-white/20 
+                      shadow-lg 
+                      text-white 
+                      text-sm 
+                      tracking-wide
+                      mt-6 ml-6
+                    "
+                  >
+                    {item.title}
+                  </div>
+                }
+              />
+            </Link>
+
           </CarouselItem>
         ))}
 
       </CarouselContent>
 
-      <CarouselPrevious variant="iconClear" size="icon-lg" className="text-white hover:text-purple-300" />
-      <CarouselNext variant="iconClear" size="icon-lg" className="text-white hover:text-purple-300" />
+      <CarouselPrevious
+        variant="iconClear"
+        size="icon-lg"
+        className="text-white hover:text-purple-300"
+      />
+      <CarouselNext
+        variant="iconClear"
+        size="icon-lg"
+        className="text-white hover:text-purple-300"
+      />
     </Carousel>
   </div>
 </section>
@@ -563,8 +723,9 @@ useEffect(() => {
       py-14 px-10
       rounded-2xl
       bg-white/10
-      backdrop-blur-xl
-      shadow-[0_8px_40px_rgba(255,255,255,0.08)]
+      backdrop-blur-md
+      border border-white/20 
+      shadow-lg
       flex flex-col gap-10
     "
   >
