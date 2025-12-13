@@ -1,0 +1,328 @@
+body {
+    font-family: Arial, sans-serif;
+    background: radial-gradient(circle at center, #2a0a24, #0f0312)!important;
+    margin: 0;
+    height: 100vh;
+    overflow: hidden; /* Evita el scroll al aplicar animaciones */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #fff!important;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15) 0px,
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 3px
+    );
+    pointer-events: none;
+    z-index: 999;
+    animation: scanline 2s infinite linear;
+}
+
+
+#gameContainer {
+    display: flex;
+    background: rgb(0 0 0 / 16%);
+    padding: 50px;
+    border-radius: 15px;
+    border: 3px solid #4a1a4a;
+    box-shadow: 0 0 40px rgba(106, 45, 150, 0.4);
+    backdrop-filter: blur(3px);
+    position: relative;
+}
+
+#mazeCanvas {
+    border: 3px solid #6a2d96;
+    border-radius: 8px;
+    box-shadow: 0 0 30px rgba(106, 45, 150, 0.3);
+}
+
+#mazeCanvas.regenerate {
+    transform: scale(0);
+    animation: regenerateMaze 0.5s forwards;
+}
+
+@keyframes regenerateMaze {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+#infoContainer {
+    margin-left: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#timer {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+#ranking {
+    background: linear-gradient(145deg, #1a0e1f, #130919);
+    padding: 20px;
+    border-radius: 12px;
+    border: 2px solid #4a2b5a;
+    width: 250px;
+}
+
+#ranking h2 {
+    margin-top: 0;
+    text-align: center;
+    font-size: 24px;
+    color: #fff; /* Texto en blanco */
+}
+
+#rankingList {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#rankingList li {
+    padding: 10px;
+    margin: 8px 0;
+    background: linear-gradient(90deg, rgba(74,43,90,0.3), transparent);
+    border-radius: 5px;
+    border-left: 3px solid #ff66cc;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+#rankingList li:hover {
+    transform: translateX(10px);
+    background: linear-gradient(90deg, rgba(106,45,150,0.4), transparent);
+}
+
+#difficulty {
+    background: linear-gradient(145deg, #2a0a24, #1a0618);
+    border: 2px solid #4a2b5a;
+    color: #ff99e6;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#difficulty:hover {
+    box-shadow: 0 0 15px rgba(255,102,204,0.3);
+}
+
+#controls {
+    margin-top: 25px;
+
+}
+
+#controls label {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+#controls select {
+    margin-left: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    background-color: #444;
+    color: #fff; /* Texto en blanco */
+    cursor: pointer;
+    box-shadow:
+        inset -2px -2px 5px rgba(0,0,0,0.5),
+        inset 2px 2px 5px rgba(100,100,100,0.1),
+        0 4px 10px rgba(0,0,0,0.7);
+    appearance: none;
+}
+
+#controls select:focus {
+    outline: none;
+}
+
+#controls select option {
+    background-color: #444;
+    color: #fff; /* Texto en blanco */
+}
+
+/* Estilos para botones */
+button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    background-color: #444;
+    color: #fff; /* Texto en blanco */
+    cursor: pointer;
+    box-shadow:
+        inset -2px -2px 5px rgba(0,0,0,0.5),
+        inset 2px 2px 5px rgba(100,100,100,0.1),
+        0 4px 10px rgba(0,0,0,0.7);
+}
+
+button:focus {
+    outline: none;
+}
+
+button:active {
+    box-shadow:
+        inset 2px 2px 5px rgba(0,0,0,0.5),
+        inset -2px -2px 5px rgba(100,100,100,0.1),
+        0 4px 10px rgba(0,0,0,0.7);
+}
+
+/* Estilos para el popup de victoria */
+#winPopup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.534);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(2px);
+}
+
+#winContent {
+    background: linear-gradient(145deg, #1a0e1f, #130919);
+    padding: 2rem;
+    border-radius: 15px;
+    border: 3px solid #6a2d96;
+    box-shadow: 0 0 40px rgba(106, 45, 150, 0.5);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+#winContent h2 {
+    color: #ff66cc;
+    font-size: 1.5rem;
+    text-shadow: 0 0 15px rgba(255, 102, 204, 0.5);
+}
+
+#winPopup.show {
+    display: flex;
+    animation: fadeIn 0.5s forwards;
+}
+
+#winPopup.hide {
+    animation: fadeOut 0.5s forwards;
+}
+
+
+#saveButton {
+    background: linear-gradient(145deg, #6a2d96, #4a2b5a);
+    border: none;
+    color: #ff99e6;
+    padding: 10px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#saveButton:hover {
+    box-shadow: 0 0 20px rgba(255,102,204,0.3);
+    transform: translateY(-2px);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+
+#winContent p {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+#winContent #winTime {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+#winContent input[type="text"] {
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid #4a2b5a;
+    color: #ffffff;
+    margin: 15px 0;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+
+#winContent button {
+    padding: 10px 20px;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    background-color: #444;
+    color: #fff; /* Texto en blanco */
+    cursor: pointer;
+    box-shadow:
+        inset -2px -2px 5px rgba(0,0,0,0.5),
+        inset 2px 2px 5px rgba(100,100,100,0.1),
+        0 4px 10px rgba(0,0,0,0.7);
+}
+
+#winContent button:focus {
+    outline: none;
+}
+
+#winContent button:active {
+    box-shadow:
+        inset 2px 2px 5px rgba(0,0,0,0.5),
+        inset -2px -2px 5px rgba(100,100,100,0.1),
+        0 4px 10px rgba(0,0,0,0.7);
+}
+
+/* Estilos para el canvas del confeti */
+#confettiCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Permite hacer clic a través del canvas */
+    z-index: 998;
+    opacity: 0.4;
+}

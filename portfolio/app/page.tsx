@@ -91,8 +91,16 @@ export default function Page() {
   const projTitleRef = useRef<HTMLHeadingElement>(null);
   const projCarouselRef = useRef<HTMLDivElement>(null);
   const experienceRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLElement | null>(null)
+const successRef = useRef<HTMLElement | null>(null)
 
 
+  const [sent, setSent] = useState(false)
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setSent(true)
+  }
 
   /* Loader */
   const [loaderDone, setLoaderDone] = useState(false);
@@ -118,6 +126,45 @@ export default function Page() {
     window.scrollTo(0, 0);
     setTimeout(() => window.scrollTo(0, 0), 50);
   }, []);
+
+ /* ---------------------------------
+   GSAP – FORM viewport + SUCCESS
+--------------------------------- */
+useEffect(() => {
+  // FORM → cuando entra en viewport
+  if (formRef.current) {
+    gsap.fromTo(
+      formRef.current,
+      { opacity: 0, y: 80 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1.1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: formRef.current,
+          start: "top center",
+          once: true, // 👈 solo una vez
+        },
+      }
+    )
+  }
+
+  // SUCCESS → al aparecer (sin scroll)
+  if (sent && successRef.current) {
+    gsap.fromTo(
+      successRef.current,
+      { opacity: 0, y: 40 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: "power3.out",
+      }
+    )
+  }
+}, [sent])
+
 
   /* Loader Animation */
   useEffect(() => {
@@ -228,6 +275,18 @@ useGSAP(() => {
     },
   });
 
+    gsap.from(".project-desc", {
+    y: -30,
+    opacity: 0,
+    duration: 1.2,
+    delay: 0.2,
+    ease: "power3.out",
+    scrollTrigger: {
+      trigger: section3Ref.current,
+      start: "top 80%",
+    },
+  });
+
   // 🟣 Carrusel infinito real (scroll continuo sin paradas)
   gsap.to(".skills-slider", {
     x: "-50%",     // suficiente para moverse sin mostrar huecos
@@ -270,6 +329,7 @@ useEffect(() => {
     },
   });
 }, []);
+
 
 useGSAP(() => {
   // Animación del título
@@ -381,7 +441,7 @@ useGSAP(() => {
       <nav className="w-full fixed top-0 left-0 z-50">
         <div className="max-w-[1500px] mx-auto px-6 md:px-10 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src="/tu-logo.png" alt="logo" className="w-10 h-10 object-contain" />
+            <img src="/logo.png" alt="logo" className="w-10 h-10 rounded-full" />
           </div>
 
           
@@ -503,7 +563,7 @@ useGSAP(() => {
   className="w-full py-32 px-6 md:px-20 text-white relative z-10"
 >
   {/* Título General */}
-  <h2 className="exp-title text-6xl md:text-7xl font-light tracking-tight mb-24 opacity-90 text-purple-300 font-['Playfair_Display']">
+  <h2 className="exp-title text-6xl md:text-7xl font-light tracking-tight mb-24 opacity-90 text-purple-400 font-['Playfair_Display']">
     Trayectoria Profesional
   </h2>
 
@@ -525,12 +585,12 @@ useGSAP(() => {
       {/* Contenido */}
       <div className="flex flex-col gap-4">
         <h2 className="text-5xl md:text-6xl font-semibold transition-all duration-300 group-hover:scale-[1.015]">
-          Experiencia Profesional
+          NTT DATA
         </h2>
 
         <p className="text-lg opacity-70 max-w-3xl leading-relaxed">
-          Como desarrolladora creativa, he liderado proyectos donde combino UI/UX,
-          animación y estructuras sólidas de frontend para crear experiencias digitales fluidas.
+          Actual becaria en NTT DATA, empresa consultora multinacional.
+          Ayudando en el desarrollo frontend y backend de aplicaciones web
         </p>
 
         <div className="flex gap-3 mt-1">
@@ -543,7 +603,7 @@ useGSAP(() => {
           </span>
 
           <span className="px-4 py-1 rounded-full bg-white/10 backdrop-blur-md text-sm border border-white/10 transition-all duration-300 group-hover:border-[#b38bff]">
-            Animación
+            Backend
           </span>
         </div>
       </div>
@@ -558,21 +618,22 @@ useGSAP(() => {
 
       <div className="flex flex-col gap-4">
         <h2 className="text-5xl md:text-6xl font-semibold transition-all duration-300 group-hover:scale-[1.015]">
-          Dirección de Proyecto
+          IFP
         </h2>
 
         <p className="text-lg opacity-70 max-w-3xl leading-relaxed">
-          He dirigido equipos pequeños para coordinar diseño, desarrollo y despliegue,
-          asegurando eficiencia, claridad y un producto final impecable.
+          Estudiante de Desarrollo de Aplicaciones Web en IFP,
+          adquiriendo habilidades prácticas en programación, diseño y
+          gestión de proyectos digitales.
         </p>
 
         <div className="flex gap-3 mt-1">
           <span className="px-4 py-1 rounded-full bg-white/10 backdrop-blur-md text-sm border border-white/10 transition-all duration-300 group-hover:border-[#b38bff]">
-            Project Lead
+            UI/UX
           </span>
 
           <span className="px-4 py-1 rounded-full bg-white/10 backdrop-blur-md text-sm border border-white/10 transition-all duration-300 group-hover:border-[#b38bff]">
-            Gestión UX
+            Fullstack
           </span>
         </div>
       </div>
@@ -587,25 +648,20 @@ useGSAP(() => {
 
       <div className="flex flex-col gap-4">
         <h2 className="text-5xl md:text-6xl font-semibold transition-all duration-300 group-hover:scale-[1.015]">
-          Interfaces Dinámicas
+          Universidad Massana
         </h2>
 
         <p className="text-lg opacity-70 max-w-3xl leading-relaxed">
-          Construcción de interfaces animadas con GSAP, Three.js y React, logrando
-          experiencias interactivas rápidas, suaves y memorables.
+          Estudiante de Grado en Arte y Diseño, adquiriendo una perspectiva del diseño amplia y creativa, perfecta para aplicarlo al desarrollo web.
         </p>
 
         <div className="flex gap-3 mt-1">
           <span className="px-4 py-1 rounded-full bg-white/10 backdrop-blur-md text-sm border border-white/10 transition-all duration-300 group-hover:border-[#b38bff]">
-            Web
+            Diseño
           </span>
 
           <span className="px-4 py-1 rounded-full bg-white/10 backdrop-blur-md text-sm border border-white/10 transition-all duration-300 group-hover:border-[#b38bff]">
-            Animaciones
-          </span>
-
-          <span className="px-4 py-1 rounded-full bg-white/10 backdrop-blur-md text-sm border border-white/10 transition-all duration-300 group-hover:border-[#b38bff]">
-            React
+            Psicología aplicada al diseño
           </span>
         </div>
       </div>
@@ -626,10 +682,14 @@ useGSAP(() => {
   <div className="w-[80vw] max-w-[1150px]">
     <h2
   ref={projTitleRef}
-  className="proj-title text-6xl md:text-7xl font-light tracking-tight opacity-0 mb-8 text-white font-['Playfair_Display']"
+  className="proj-title text-6xl md:text-7xl font-light tracking-tight opacity-0 mb-3 text-white font-['Playfair_Display']"
 >
   Proyectos
 </h2>
+ {/* P breve descripción */}
+  <p className="project-desc text-left text-lg opacity-0 opacity-70 max-w-2xl">
+    Todo disponible en mi GitHub
+  </p>
 
   </div>
 
@@ -639,24 +699,25 @@ useGSAP(() => {
 
         {[
           {
-            img: "https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58",
-            title: "Kendrick Lamar - GNX",
-            link: "/proyecto-1"
+            img: "/soyrio.png",
+            title: "SoyRio - Landing Page",
+
+          },
+           {
+            img: "/laberinto.png",
+            title: "Laberinto - Minijuego Web",
+
           },
           {
-            img: "https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58",
-            title: "Album 2",
-            link: "/proyecto-2"
+            img: "cine.png",
+            title: "El Séptimo Club - Beta",
+
           },
+         
           {
-            img: "https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58",
-            title: "Album 3",
-            link: "/proyecto-3"
-          },
-          {
-            img: "https://i.scdn.co/image/ab67616d0000b273d9985092cd88bffd97653b58",
-            title: "Album 4",
-            link: "/proyecto-4"
+            img: "/landing-palestina.png",
+            title: "Palestina - Landing Page",
+
           },
         ].map((item, i) => (
           <CarouselItem
@@ -664,7 +725,7 @@ useGSAP(() => {
             className="basis-full md:basis-1/2 flex justify-center"
           >
 
-            <Link href={item.link}>
+            
               <TiltedCard
                 imageSrc={item.img}
                 altText={item.title}
@@ -697,7 +758,7 @@ useGSAP(() => {
                   </div>
                 }
               />
-            </Link>
+           
 
           </CarouselItem>
         ))}
@@ -718,102 +779,110 @@ useGSAP(() => {
   </div>
 </section>
 
-<section
-  className="
-    h-[90vh]
-    flex flex-col items-center justify-center
-    text-white relative z-10
-    px-4
-  "
->
-  {/* GLASSBOX */}
-  <div
+{!sent ? (
+  /* ---------- FORM ---------- */
+  <section  ref={formRef}
     className="
-      w-[60vw]
-      max-w-[1200px]
-      py-14 px-10
-      rounded-2xl
-      bg-white/10
-      backdrop-blur-md
-      border border-white/20 
-      shadow-lg
-      flex flex-col gap-10
+      h-[85vh]
+      flex justify-center
+      text-white
+      relative z-10
+      px-8 md:px-20 lg:px-46
     "
   >
-    <h2 className="
-        text-center text-3xl font-light tracking-tight
-        mb-1 opacity-80 font-['Playfair_Display']"
+    {/* Header */}
+    <div className="w-[60vw] flex flex-col justify-center">
+
+    <div className="mb-8">
+      <div className="flex items-center gap-3 mb-6">
+        <span className="w-2 h-2 rounded-full bg-purple-400"></span>
+        <span className="text-sm uppercase tracking-widest text-white/60">
+          Información de contacto
+        </span>
+      </div>
+
+      <h2 className="text-6xl md:text-7xl font-light tracking-tight font-['Playfair_Display']">
+        Empecemos a trabajar juntos
+      </h2>
+    </div>
+
+    <form
+      onSubmit={handleSubmit}
+      className="w-full flex flex-col gap-6"
     >
-      Trabajemos juntos
-    </h2>
-
-    <form className="flex flex-col gap-8 text-white w-full">
-
-      {/* Nombre */}
       <input
         type="text"
         placeholder="Nombre"
-        className="
-          bg-transparent
-          border-b border-white/40
-          outline-none
-          py-3
-          text-white
-          placeholder-white/50
-        "
+        className="w-full px-6 py-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 outline-none text-white placeholder-white/50"
       />
 
-      {/* Email */}
       <input
         type="email"
         placeholder="Email"
-        className="
-          bg-transparent
-          border-b border-white/40
-          outline-none
-          py-3
-          text-white
-          placeholder-white/50
-        "
+        className="w-full px-6 py-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 outline-none text-white placeholder-white/50"
       />
 
-      {/* Mensaje */}
       <textarea
         placeholder="Mensaje"
-        className="
-          bg-transparent
-          border-b border-white/40
-          outline-none
-          py-3
-          text-white
-          placeholder-white/50
-          min-h-[100px]
-          resize-none
-        "
+        className="w-full px-6 py-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 outline-none text-white placeholder-white/50 min-h-[140px] resize-none"
       />
 
-      {/* Enviar */}
-      <button
-        type="submit"
-        className="
-          bg-white/90
-          text-black
-          px-6 py-3
-          rounded-full
-          font-normal
-          w-full
-          mt-4
-          hover:bg-white
-          transition
-        "
-      >
-        Enviar
-      </button>
-
+      <div className="flex justify-start">
+        <button
+          type="submit"
+          className="px-12 py-3 rounded-full bg-purple-500 border border-white/30 text-black text-sm hover:bg-purple-300 transition"
+        >
+          Enviar
+        </button>
+      </div>
     </form>
-  </div>
-</section>
+    {/* Línea inferior */}
+    <div className="w-full h-px bg-white/10 mt-16" />
+    </div>
+  </section>
+  
+) : (
+  /* ---------- SUCCESS ---------- */
+  <section ref={successRef}
+    className="
+      h-[100vh]
+      flex flex-col justify-center
+      text-white
+      relative z-10
+      px-8 md:px-20 lg:px-46
+    "
+  >
+    <div className="mb-6">
+      <div className="flex items-center gap-3 mb-4">
+        <span className="w-2 h-2 rounded-full bg-purple-400"></span>
+        <span className="text-sm uppercase tracking-widest text-white/60">
+          Mensaje enviado
+        </span>
+      </div>
 
+      <h2 className="text-6xl md:text-7xl font-light tracking-tight opacity-90 font-['Playfair_Display']">
+        Gracias por contactarme
+      </h2>
+    </div>
+
+    <p className="max-w-xl text-white/70 text-lg">
+      He recibido tu mensaje.  
+      Te responderé lo antes posible para que podamos empezar a trabajar juntos.
+    </p>
+  </section>
+  
+)}
+<section className="
+h-[5vh]
+w-[65vw]
+flex justify-center
+      text-white
+      relative z-10
+      px-8 md:px-20 lg:px-46">
+  <p className="text-left text-sm text-white/40 tracking-wide">
+  Hecho con pasión, desde Barcelona. © Todos los derechos reservados.
+</p>
+</section>
 
     </main>
   );
