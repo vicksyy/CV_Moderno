@@ -231,19 +231,7 @@ export default function Galaxy({
     }
 
 
-    function resize() {
-      const scale = 1;
-      renderer.setSize(ctn.offsetWidth * scale, ctn.offsetHeight * scale);
-      if (program) {
-        program.uniforms.uResolution.value = new Color(
-          gl.canvas.width,
-          gl.canvas.height,
-          gl.canvas.width / gl.canvas.height
-        );
-      }
-    }
-    window.addEventListener('resize', resize, false);
-    resize();
+
 
     const geometry = new Triangle(gl);
     const program = new Program(gl, {
@@ -274,6 +262,20 @@ export default function Galaxy({
         uTransparent: { value: transparent }
       }
     });
+
+    function resize() {
+  const scale = 1;
+  renderer.setSize(ctn.offsetWidth * scale, ctn.offsetHeight * scale);
+
+  program.uniforms.uResolution.value.set(
+    gl.canvas.width,
+    gl.canvas.height,
+    gl.canvas.width / gl.canvas.height
+  );
+}
+
+window.addEventListener("resize", resize);
+resize();
 
     const mesh = new Mesh(gl, { geometry, program });
     let animateId: number;

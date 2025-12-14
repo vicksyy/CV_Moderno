@@ -253,7 +253,7 @@ useEffect(() => {
       scrollTrigger: {
         trigger: section2Ref.current,
         start: "top 95%",
-        end: () => `${section3Ref.current!.offsetTop + 600}`,
+        end: "+=600",
         scrub: true,
       },
     });
