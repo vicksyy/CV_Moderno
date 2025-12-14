@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import Link from "next/link";
 import { useGSAP } from "@gsap/react";
 import Lenis from "lenis";
 import { Canvas } from "@react-three/fiber";
@@ -92,7 +91,9 @@ export default function Page() {
   const projCarouselRef = useRef<HTMLDivElement>(null);
   const experienceRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLElement | null>(null)
-const successRef = useRef<HTMLElement | null>(null)
+  const successRef = useRef<HTMLElement | null>(null)
+const imageRef = useRef<HTMLImageElement | null>(null)
+
 
 
   const [sent, setSent] = useState(false)
@@ -107,6 +108,16 @@ const successRef = useRef<HTMLElement | null>(null)
 
   const whiteScreenRef = useRef<HTMLDivElement>(null);
   const blackScreenRef = useRef<HTMLDivElement>(null);
+
+const [isMobile, setIsMobile] = useState(false);
+
+useEffect(() => {
+  const check = () => setIsMobile(window.innerWidth < 768);
+  check();
+  window.addEventListener("resize", check);
+  return () => window.removeEventListener("resize", check);
+}, []);
+
 
   /* --------------------------------------------------
       🚫 Bloquear scroll mientras loader está activo
@@ -330,6 +341,24 @@ useEffect(() => {
   });
 }, []);
 
+useEffect(() => {
+  gsap.fromTo(
+    imageRef.current,
+    {
+      x: 120,
+      opacity: 0
+    },
+    {
+      x: 0,
+      opacity: 0.9,
+      duration: 1.4,
+      ease: "power3.out",
+      delay: 0.2
+    }
+  )
+}, [])
+
+
 
 useGSAP(() => {
   // Animación del título
@@ -402,21 +431,21 @@ useGSAP(() => {
         />
       </div>
 
-      {/* 🌍 Tierra */}
       <div
-        className="
-          pointer-events-auto
-          absolute
-          top-[-15vh]
-          right-[-50vw]
-          h-[130vh]
-          w-[130vw]
-          overflow-visible
-          z-10
-        "
-      >
-        <EarthCanvas />
-      </div>
+  className="
+    pointer-events-auto
+    absolute
+    top-[-20svh] md:top-[-15vh]
+    right-[-80svw] md:right-[-50vw]
+    h-[180svh] md:h-[130vh]
+    w-[180svw] md:w-[130vw]
+    overflow-visible
+    z-10
+  "
+>
+  <EarthCanvas />
+</div>
+
 
       {/* 🛸 OVNI */}
       <div
@@ -437,27 +466,62 @@ useGSAP(() => {
       {/* Glow */}
       <div className="absolute top-0 left-0 w-full h-[350px] bg-purple-600/40 blur-[140px] opacity-60 pointer-events-none" />
 
-      {/* NAVBAR */}
-      <nav className="w-full fixed top-0 left-0 z-50">
-        <div className="max-w-[1500px] mx-auto px-6 md:px-10 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="logo" className="w-10 h-10 rounded-full" />
-          </div>
+    <nav className="w-full fixed top-0 left-0 z-50">
+  <div className="max-w-[1500px] mx-auto px-4 md:px-10 py-4 flex items-center justify-between">
 
-          
-            <Navbar />
-          
+    {/* LOGO */}
+    <div className="flex items-center gap-3 shrink-0">
+      <img
+        src="/logo.png"
+        alt="logo"
+        className="w-9 h-9 md:w-10 md:h-10 rounded-full"
+      />
+    </div>
 
-          <div className="hidden md:flex items-center gap-5 text-xl opacity-90">
-            <i className="fa-brands fa-github hover:text-purple-400 transition"></i>
-            <i className="fa-brands fa-linkedin hover:text-purple-400 transition"></i>
-            <i className="fa-brands fa-x-twitter hover:text-purple-400 transition"></i>
-          </div>
-        </div>
-      </nav>
+    {/* NAVBAR (solo desktop) */}
+    <div className="hidden md:flex">
+      <Navbar />
+    </div>
+
+    {/* ICONOS */}
+    <div className="flex items-center gap-4 text-lg md:text-xl opacity-90 shrink-0">
+      <a
+        href="https://github.com/vicksyy"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="hover:text-purple-400 transition"
+        aria-label="GitHub"
+      >
+        <i className="fa-brands fa-github"></i>
+      </a>
+
+      <a
+        href="https://www.linkedin.com/in/victoria-martin-g/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="hover:text-purple-400 transition"
+        aria-label="LinkedIn"
+      >
+        <i className="fa-brands fa-linkedin"></i>
+      </a>
+
+      <a
+        href="https://twitter.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="hover:text-purple-400 transition"
+        aria-label="X / Twitter"
+      >
+        <i className="fa-brands fa-x-twitter"></i>
+      </a>
+    </div>
+
+  </div>
+</nav>
+
 
       {/* HERO */}
-<section ref={heroRef} className="h-[100vh] relative z-10 pt-72 pointer-events-none">
+<section ref={heroRef} className="h-[100svh] relative z-10 pt-40 sm:pt-56 md:pt-72 pointer-events-none">
 
   {/* P debajo del todo, esquina inferior izquierda */}
   <p
@@ -469,28 +533,37 @@ useGSAP(() => {
     Desarrolladora Creativa. En todas partes
   </p>
 
-  <div className="max-w-[1400px] mx-auto px-6 md:px-12 xl:px-20 grid grid-cols-1 md:grid-cols-2 items-center gap-20 pointer-events-none">
-    <div className="max-w-xl relative z-20 order-1">
-      <div className="fade-up mb-3 leading-[0.9]">
-        <span
-          className="mt-10 mb-2 opacity-90 block text-[120px] md:text-[140px] font-['Playfair_Display']"
-        >
-          Victoria
-        </span>
+<div className="max-w-[1400px] mx-auto px-6 md:px-12 xl:px-20 grid grid-cols-1 md:grid-cols-2 items-center gap-20 pointer-events-none">
+  <div className="max-w-xl relative z-20 order-1">
+    <div className="fade-up mb-3 leading-[0.9]">
+      <span
+        className="
+          mt-10 mb-2 opacity-90 block
+          text-[64px] sm:text-[90px] md:text-[140px]
+          font-['Playfair_Display']
+        "
+      >
+        Victoria
+      </span>
 
-        <span
-          className="ml-[1em] block opacity-90 text-[120px] md:text-[140px] font-extrabold tracking-wide"
-          style={{
-            fontFamily: "'Playfair Display', serif",
-            fontWeight: 'lighter',
-            letterSpacing: "1px",
-          }}
-        >
-          Martín<span className="text-purple-600 opacity-90">.</span>
-        </span>
-      </div>
+      <span
+        className="
+          ml-[1em] block opacity-90
+          text-[64px] sm:text-[90px] md:text-[140px]
+          font-extrabold tracking-wide
+        "
+        style={{
+          fontFamily: "'Playfair Display', serif",
+          fontWeight: "lighter",
+          letterSpacing: "1px",
+        }}
+      >
+        Martín<span className="text-purple-600 opacity-90">.</span>
+      </span>
     </div>
   </div>
+</div>
+
 </section>
 
 
@@ -730,12 +803,12 @@ useGSAP(() => {
                 imageSrc={item.img}
                 altText={item.title}
                 captionText={item.title}
-                containerHeight="40vh"
-                containerWidth="30vw"
-                imageHeight="40vh"
-                imageWidth="30vw"
-                rotateAmplitude={12}
-                scaleOnHover={1.05}
+                containerHeight={isMobile ? "50vh" : "40vh"}
+                containerWidth={isMobile ? "80vw" : "30vw"}
+                imageHeight={isMobile ? "50vh" : "40vh"}
+                imageWidth={isMobile ? "80vw" : "30vw"}
+                rotateAmplitude={isMobile ? 0 : 12}
+                scaleOnHover={isMobile ? 1 : 1.05}
                 showMobileWarning={false}
                 showTooltip={false}
                 displayOverlayContent={true}
@@ -781,71 +854,89 @@ useGSAP(() => {
 
 {!sent ? (
   /* ---------- FORM ---------- */
-  <section  ref={formRef}
-    className="
-      h-[85vh]
-      flex justify-center
-      text-white
-      relative z-10
-      px-8 md:px-20 lg:px-46
-    "
-  >
-    {/* Header */}
-    <div className="w-[60vw] flex flex-col justify-center">
+<section
+  ref={formRef}
+  className="
+    h-[85vh]
+    flex items-center
+    text-white
+    relative z-10
+    px-8 md:px-20 lg:px-46
+  "
+>
+  {/* CONTENEDOR 2 COLUMNAS */}
+  <div className="w-full flex flex-col lg:flex-row items-stretch gap-10">
 
-    <div className="mb-8">
-      <div className="flex items-center gap-3 mb-6">
-        <span className="w-2 h-2 rounded-full bg-purple-400"></span>
-        <span className="text-sm uppercase tracking-widest text-white/60">
-          Información de contacto
-        </span>
+    {/* ---------- COLUMNA IZQUIERDA (FORM) ---------- */}
+    <div className="w-full lg:w-[55%] flex flex-col justify-center">
+
+      <div className="mb-8">
+        <div className="flex items-center gap-3 mb-6">
+          <span className="w-2 h-2 rounded-full bg-purple-400"></span>
+          <span className="text-sm uppercase tracking-widest text-white/60">
+            Información de contacto
+          </span>
+        </div>
+
+        <h2 className="text-5xl md:text-6xl font-light tracking-tight font-['Playfair_Display']">
+          Trabajemos juntos
+        </h2>
       </div>
 
-      <h2 className="text-6xl md:text-7xl font-light tracking-tight font-['Playfair_Display']">
-        Empecemos a trabajar juntos
-      </h2>
-    </div>
+      <form onSubmit={handleSubmit} className="w-full flex flex-col gap-6">
+        <input
+          type="text"
+          placeholder="Nombre"
+          className="w-full px-6 py-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 outline-none text-white placeholder-white/50"
+        />
 
-    <form
-      onSubmit={handleSubmit}
-      className="w-full flex flex-col gap-6"
-    >
-      <input
-        type="text"
-        placeholder="Nombre"
-        className="w-full px-6 py-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 outline-none text-white placeholder-white/50"
-      />
+        <input
+          type="email"
+          placeholder="Email"
+          className="w-full px-6 py-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 outline-none text-white placeholder-white/50"
+        />
 
-      <input
-        type="email"
-        placeholder="Email"
-        className="w-full px-6 py-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 outline-none text-white placeholder-white/50"
-      />
+        <textarea
+          placeholder="Mensaje"
+          className="w-full px-6 py-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 outline-none text-white placeholder-white/50 min-h-[140px] resize-none"
+        />
 
-      <textarea
-        placeholder="Mensaje"
-        className="w-full px-6 py-4 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 outline-none text-white placeholder-white/50 min-h-[140px] resize-none"
-      />
-
-      <div className="flex justify-start">
         <button
           type="submit"
-          className="px-12 py-3 rounded-full bg-purple-500 border border-white/30 text-black text-sm hover:bg-purple-300 transition"
+          className="self-start px-12 py-3 rounded-full bg-purple-500 border border-white/30 text-black text-sm hover:bg-purple-300 transition"
         >
           Enviar
         </button>
-      </div>
-    </form>
-    {/* Línea inferior */}
-    <div className="w-full h-px bg-white/10 mt-16" />
+      </form>
+
+      <div className="w-full h-px bg-white/10 mt-16" />
     </div>
-  </section>
+
+    {/* ---------- COLUMNA DERECHA (IMAGEN) ---------- */}
+    <div className="hidden lg:flex lg:w-[45%] justify-center items-center">
+      <img
+        ref={imageRef}
+        src="/Fotocv.jpg"
+        alt="Foto de contacto"
+        className="
+          w-[20vw] h-[40vh]
+          object-cover
+          rounded-3xl
+          opacity-75
+        "
+      />
+    </div>
+
+  </div>
+</section>
+
+
   
 ) : (
   /* ---------- SUCCESS ---------- */
   <section ref={successRef}
     className="
-      h-[100vh]
+      h-[85vh]
       flex flex-col justify-center
       text-white
       relative z-10
@@ -874,8 +965,8 @@ useGSAP(() => {
 )}
 <section className="
 h-[5vh]
-w-[65vw]
-flex justify-center
+w-[85vw]
+flex
       text-white
       relative z-10
       px-8 md:px-20 lg:px-46">
