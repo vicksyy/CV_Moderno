@@ -397,20 +397,32 @@ useGSAP(() => {
       {/* LOADER */}
       {!loaderDone && (
         <div
-          ref={whiteScreenRef}
-          className="fixed inset-0 bg-black flex items-center justify-center z-[9999]"
-        >
-          <h1
-            className="loader-text opacity-0 text-white text-3xl tracking-[0.5em]"
-            style={{
-              fontFamily: "Helvetica, Arial, sans-serif",
-              fontWeight: 300,
-              letterSpacing: "0.25em",
-            }}
-          >
-            EL PORTFOLIO DE VICTORIA
-          </h1>
-        </div>
+  ref={whiteScreenRef}
+  className="fixed inset-0 bg-black flex items-center justify-center z-[9999]"
+>
+  <h1
+    className="
+      loader-text
+      opacity-0
+      text-white
+      text-[14px]
+      sm:text-[18px]
+      md:text-[24px]
+      lg:text-3xl
+      tracking-[0.25em]
+      text-center
+      px-6
+    "
+    style={{
+      fontFamily: "Helvetica, Arial, sans-serif",
+      fontWeight: 300,
+      letterSpacing: "0.25em",
+    }}
+  >
+    EL PORTFOLIO DE VICTORIA
+  </h1>
+</div>
+
       )}
 
       {!loaderDone && (
