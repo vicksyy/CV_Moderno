@@ -241,8 +241,9 @@ useEffect(() => {
   /* 🛸 OVNI scroll animation */
   useEffect(() => {
     const ufo = ufoRef.current;
+    const section2 = section2Ref.current;
 
-    if (!ufo || !section2Ref.current || !section3Ref.current) return;
+    if (!ufo || !section2) return;
 
     gsap.set(ufo, { x: "-60vw", y: "-20vh" });
 
@@ -251,7 +252,7 @@ useEffect(() => {
       y: "95vh",
       ease: "none",
       scrollTrigger: {
-        trigger: section2Ref.current,
+        trigger: section2,
         start: "top 95%",
         end: "+=600",
         scrub: true,
